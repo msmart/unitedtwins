@@ -10,9 +10,12 @@ def get-events [] {
         | each { |x| insert hash ($x.date + $x.msg|hash sha256) } 
 }
 
+def config [key: string] {
+  open env.toml | get $key
+}
 
 def ops [msg: string] {
-  let url = https://matrix.martinides.de/webhook/d0350dc8-aa26-46d4-8b3e-28ea5d90900f
+  let url = (config webhook)
   http post -t application/json $url { text: $msg username: unitedtwins }
 
 }
@@ -40,7 +43,7 @@ def send-msg [event: record] {
 }
 
 def main [] {
-  cd /home/msm/docker-minecraft-server
+  cd (config working_dir)
   docker compose logs | save -f log
   msgs-sent-db-exists 
   get-events | each { |x| if (was-hash-sent $x.hash) == false { send-msg $in }  }
