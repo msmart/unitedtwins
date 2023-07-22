@@ -9,7 +9,7 @@ services:
     environment:
       EULA: "TRUE"
       TYPE: "PAPER"
-      SPIGET_RESOURCES: "60623,82342"
+      SPIGET_RESOURCES: "60623,82342,83557"
     tty: true
     stdin_open: true
     restart: unless-stopped
